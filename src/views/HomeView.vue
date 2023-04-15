@@ -4,28 +4,28 @@
       Start by clicking the plus icon on the top right corner
     </h1>
     <div id="plus_out" @click="createJournal()"><div id="plus">+</div></div>
+    <JournalForm v-if="showJournalForm" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue';
+import JournalForm from '@/components/JournalForm.vue';
 
 export default {
   name: 'HomeView',
-  components: {
-    HelloWorld,
-  },
+  components: { JournalForm },
   data() {
     return {
       isEmpty: true,
+      showJournalForm: false,
       journalList: [],
       journal: {},
     };
   },
   methods: {
     createJournal() {
-      this.isEmpty = !this.isEmpty;
+      this.showJournalForm = !this.showJournalForm;
     },
   },
 };
