@@ -9,7 +9,7 @@ const routes = [
     component: HomeView,
   },
   {
-    path: '/Account.vue',
+    path: '/Account',
     name: 'Account',
     component: Account,
   },
