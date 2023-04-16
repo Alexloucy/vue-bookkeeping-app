@@ -5,7 +5,7 @@
     </h1>
     <div id="plus_out" @click="createJournal()"><div id="plus">+</div></div>
 
-    <JournalForm v-if="showJournalForm" />
+    <JournalForm v-if="showJournalForm" @clicked="onSubmit" />
     <div id="formMask" v-if="showJournalForm"></div>
   </div>
 </template>
@@ -22,12 +22,17 @@ export default {
       isEmpty: true,
       showJournalForm: false,
       journalList: [],
-      journal: {},
     };
   },
   methods: {
     createJournal() {
       this.showJournalForm = !this.showJournalForm;
+    },
+    onSubmit(entry) {
+      this.showJournalForm = !this.showJournalForm;
+      console.log(entry);
+      this.journalList.push(entry);
+      console.log(this.journalList);
     },
   },
 };
