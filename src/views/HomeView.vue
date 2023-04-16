@@ -4,7 +4,9 @@
       Start by clicking the plus icon on the top right corner
     </h1>
     <div id="plus_out" @click="createJournal()"><div id="plus">+</div></div>
+
     <JournalForm v-if="showJournalForm" />
+    <div id="formMask" v-if="showJournalForm"></div>
   </div>
 </template>
 
@@ -51,5 +53,14 @@ export default {
   vertical-align: middle;
   font-size: large;
   font-weight: bold;
+  z-index: 1;
+}
+#formMask {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 </style>
