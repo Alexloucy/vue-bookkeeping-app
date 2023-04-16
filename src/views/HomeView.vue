@@ -7,6 +7,10 @@
 
     <JournalForm v-if="showJournalForm" @clicked="onSubmit" />
     <div id="formMask" v-if="showJournalForm"></div>
+
+    <div class="journal">
+      {{ this.journalList }}
+    </div>
   </div>
 </template>
 
@@ -30,6 +34,7 @@ export default {
     },
     onSubmit(entry) {
       this.showJournalForm = !this.showJournalForm;
+      this.isEmpty = !this.isEmpty;
       console.log(entry);
       this.journalList.push(entry);
       console.log(this.journalList);
