@@ -5,7 +5,12 @@
     </h1>
     <div id="plus_out" @click="createJournal()"><div id="plus">+</div></div>
 
-    <JournalForm v-if="showJournalForm" @clicked="onSubmit" />
+    <JournalForm
+      v-if="showJournalForm"
+      @clicked="onSubmit"
+      @cancel="onCancel"
+      id="JournalForm"
+    />
     <div id="formMask" v-if="showJournalForm"></div>
 
     <div class="journal">
@@ -35,9 +40,11 @@ export default {
     onSubmit(entry) {
       this.showJournalForm = !this.showJournalForm;
       if (this.isEmpty) this.isEmpty = !this.isEmpty;
-      console.log(entry);
       this.journalList.push(entry);
-      console.log(this.journalList);
+    },
+    onCancel() {
+      console.log('receive cancel');
+      this.showJournalForm = !this.showJournalForm;
     },
   },
 };
@@ -57,13 +64,13 @@ export default {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  z-index: 1;
 }
 #plus {
   color: blue;
   vertical-align: middle;
   font-size: large;
   font-weight: bold;
-  z-index: 1;
 }
 #formMask {
   position: fixed;
@@ -72,5 +79,12 @@ export default {
   bottom: 0;
   top: 0;
   background-color: rgba(0, 0, 0, 0.6);
+}
+#JournalForm {
+  position: absolute;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

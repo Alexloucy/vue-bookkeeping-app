@@ -5,15 +5,27 @@
         <div class="title"><h1>Create a Journal</h1></div>
 
         <label for="item">item</label>
-        <input type="text" v-model="entry.item" id="item" />
+        <input type="text" v-model="entry.item" id="item" required />
 
         <label for="amount">amount</label>
-        <input type="text" v-model="entry.amount" id="amount" />
+        <input
+          type="number"
+          v-model="entry.amount"
+          id="amount"
+          placeholder="please enter a number"
+          required
+        />
 
         <label for="date">date</label>
-        <input type="text" v-model="entry.date" id="date" />
-
-        <button @click.prevent="createJournal" id="create">Create</button>
+        <input type="date" v-model="entry.date" id="date" required />
+        <div id="buttonRow">
+          <button @click.prevent="cancelJournal" id="cancel" class="formButton">
+            Cancel
+          </button>
+          <button @click.prevent="createJournal" id="create" class="formButton">
+            Create
+          </button>
+        </div>
       </form>
     </div>
   </div>
@@ -30,6 +42,11 @@ export default {
     createJournal() {
       this.$emit('clicked', this.entry);
     },
+    cancelJournal() {
+      this.entry = {};
+      this.$emit('cancel');
+      console.log('cancel');
+    },
   },
 };
 </script>
@@ -40,10 +57,14 @@ export default {
   align-items: center;
 }
 .outer {
-  width: 550px;
-  height: 550px;
+  width: 400px;
+  height: 400px;
   border-radius: 2%;
   display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
 
   background-color: white;
   z-index: 1;
@@ -57,9 +78,10 @@ form {
 }
 h1 {
   margin-left: center;
+  margin-bottom: 30px;
 }
 
-#create {
+button {
   background-color: blue;
   border-style: none;
   border-radius: 10px;
@@ -70,7 +92,22 @@ h1 {
   color: white;
   font-size: medium;
   padding: 0%;
-
+  align-items: center;
   margin-top: 30px;
+  margin-right: 30px;
+}
+
+#cancel {
+  background-color: red;
+}
+
+input {
+  width: 100%;
+  height: 20px;
+  padding: 2px;
+  margin-bottom: 3px;
+}
+label {
+  margin-bottom: 3px;
 }
 </style>
