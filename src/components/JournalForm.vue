@@ -1,24 +1,20 @@
 <template lang="">
   <div class="background">
     <div class="outer">
-      <div class="form">
-        <form action="">
-          <div class="title"><h1>Create a Journal</h1></div>
-          <div class="content">
-            <label for="item">item</label><br />
-            <input type="text" v-model="entry.item" id="item" />
-          </div>
-          <div class="content">
-            <label for="amount">amount</label><br />
-            <input type="text" v-model="entry.amount" id="amount" />
-          </div>
-          <div class="content">
-            <label for="date">date</label><br />
-            <input type="text" v-model="entry.date" id="date" />
-          </div>
-          <button @click.prevent="createJournal" id="create">Create</button>
-        </form>
-      </div>
+      <form action="">
+        <div class="title"><h1>Create a Journal</h1></div>
+
+        <label for="item">item</label>
+        <input type="text" v-model="entry.item" id="item" />
+
+        <label for="amount">amount</label>
+        <input type="text" v-model="entry.amount" id="amount" />
+
+        <label for="date">date</label>
+        <input type="text" v-model="entry.date" id="date" />
+
+        <button @click.prevent="createJournal" id="create">Create</button>
+      </form>
     </div>
   </div>
 </template>
@@ -48,19 +44,21 @@ export default {
   height: 550px;
   border-radius: 2%;
   display: flex;
+
   background-color: white;
   z-index: 1;
 }
-.form {
+form {
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  align-content: center;
+  flex-wrap: wrap;
 }
 h1 {
+  margin-left: center;
 }
-.content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+
 #create {
   background-color: blue;
   border-style: none;
@@ -72,7 +70,7 @@ h1 {
   color: white;
   font-size: medium;
   padding: 0%;
-  box-sizing: content-box;
-  align-items: center;
+
+  margin-top: 30px;
 }
 </style>
