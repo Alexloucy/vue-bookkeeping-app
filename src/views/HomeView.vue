@@ -13,8 +13,13 @@
     />
     <div id="formMask" v-if="showJournalForm"></div>
 
-    <div class="journal">
-      {{ this.journalList }}
+    <div class="journalList">
+      <div class="journal" v-for="(entry, i) in journalList" :key="i">
+        <span id="item">{{ entry.item }}</span>
+        <span id="amount">{{ entry.amount }}</span>
+        <span id="date">{{ entry.date }}</span>
+        <span id="delete">Delete</span>
+      </div>
     </div>
   </div>
 </template>
@@ -86,5 +91,27 @@ export default {
   right: 0;
   margin-left: auto;
   margin-right: auto;
+}
+
+.journal {
+  display: flex;
+  width: 70vh;
+  height: 10vh;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgb(238, 229, 229);
+  border-radius: 5px;
+  margin-bottom: 10px;
+  padding: 1px;
+  font-size: large;
+}
+#delete {
+  font-size: medium;
+  background-color: red;
+  padding: 6px;
+  border-radius: 5px;
+  color: white;
 }
 </style>
