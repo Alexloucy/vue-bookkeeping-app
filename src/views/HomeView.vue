@@ -34,7 +34,7 @@ export default {
     },
     onSubmit(entry) {
       this.showJournalForm = !this.showJournalForm;
-      this.isEmpty = !this.isEmpty;
+      if (this.isEmpty) this.isEmpty = !this.isEmpty;
       console.log(entry);
       this.journalList.push(entry);
       console.log(this.journalList);

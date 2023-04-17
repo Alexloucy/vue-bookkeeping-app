@@ -1,9 +1,9 @@
 <template lang="">
   <div class="background">
     <div class="outer">
-      <h1>Create a Journal</h1>
       <div class="form">
         <form action="">
+          <div class="title"><h1>Create a Journal</h1></div>
           <div class="content">
             <label for="item">item</label><br />
             <input type="text" v-model="entry.item" id="item" />
@@ -16,7 +16,7 @@
             <label for="date">date</label><br />
             <input type="text" v-model="entry.date" id="date" />
           </div>
-          <button @click.prevent="createJournal">Create</button>
+          <button @click.prevent="createJournal" id="create">Create</button>
         </form>
       </div>
     </div>
@@ -46,22 +46,33 @@ export default {
 .outer {
   width: 550px;
   height: 550px;
-  border-style: solid;
   border-radius: 2%;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 20px 20px 40px 1px #656565;
   background-color: white;
   z-index: 1;
 }
 .form {
   display: flex;
 }
+h1 {
+}
 .content {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+#create {
+  background-color: blue;
+  border-style: none;
+  border-radius: 10px;
+  width: 80px;
+  height: 40px;
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+  font-size: medium;
+  padding: 0%;
+  box-sizing: content-box;
+  align-items: center;
 }
 </style>
