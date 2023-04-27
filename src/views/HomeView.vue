@@ -26,10 +26,10 @@
 
 <script>
 // @ is an alias to /src
-import JournalForm from '@/components/JournalForm.vue';
+import JournalForm from "@/components/JournalForm.vue";
 
 export default {
-  name: 'HomeView',
+  name: "HomeView",
   components: { JournalForm },
   data() {
     return {
@@ -43,12 +43,16 @@ export default {
       this.showJournalForm = !this.showJournalForm;
     },
     onSubmit(entry) {
-      this.showJournalForm = !this.showJournalForm;
-      if (this.isEmpty) this.isEmpty = !this.isEmpty;
-      this.journalList.push(entry);
+      if (entry.item && entry.amount && entry.date) {
+        this.showJournalForm = !this.showJournalForm;
+        if (this.isEmpty) this.isEmpty = !this.isEmpty;
+        this.journalList.push(entry);
+      } else {
+        alert("Please fill in all the blanks");
+      }
     },
     onCancel() {
-      console.log('receive cancel');
+      console.log("receive cancel");
       this.showJournalForm = !this.showJournalForm;
     },
   },
