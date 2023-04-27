@@ -16,9 +16,13 @@
     <div class="journalList">
       <div class="journal" v-for="(entry, i) in journalList" :key="i">
         <span id="item">{{ entry.item }}</span>
-        <span id="amount">{{ entry.amount }}</span>
+        <span id="amount">${{ entry.amount }}</span>
         <span id="date">{{ entry.date }}</span>
-        <span id="delete">Delete</span>
+        <span
+          ><button id="delete" type="button" @click="onDelete(i)">
+            Delete
+          </button></span
+        >
       </div>
     </div>
   </div>
@@ -54,6 +58,9 @@ export default {
     onCancel() {
       console.log("receive cancel");
       this.showJournalForm = !this.showJournalForm;
+    },
+    onDelete(i) {
+      this.journalList.pop(i);
     },
   },
 };
@@ -117,5 +124,6 @@ export default {
   padding: 6px;
   border-radius: 5px;
   color: white;
+  margin: 0;
 }
 </style>
