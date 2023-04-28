@@ -16,9 +16,13 @@
     <div class="journalList">
       <div class="journal" v-for="(entry, i) in journalList" :key="i">
         <span id="item">{{ entry.item }}</span>
-        <span id="amount">{{ entry.amount }}</span>
+        <span id="amount">${{ entry.amount }}</span>
         <span id="date">{{ entry.date }}</span>
-        <span id="delete">Delete</span>
+        <span
+          ><button id="delete" type="button" @click="onDelete(i)">
+            Delete
+          </button></span
+        >
       </div>
     </div>
   </div>
@@ -26,10 +30,10 @@
 
 <script>
 // @ is an alias to /src
-import JournalForm from '@/components/JournalForm.vue';
+import JournalForm from "@/components/JournalForm.vue";
 
 export default {
-  name: 'HomeView',
+  name: "HomeView",
   components: { JournalForm },
   data() {
     return {
@@ -43,13 +47,20 @@ export default {
       this.showJournalForm = !this.showJournalForm;
     },
     onSubmit(entry) {
-      this.showJournalForm = !this.showJournalForm;
-      if (this.isEmpty) this.isEmpty = !this.isEmpty;
-      this.journalList.push(entry);
+      if (entry.item && entry.amount && entry.date) {
+        this.showJournalForm = !this.showJournalForm;
+        if (this.isEmpty) this.isEmpty = !this.isEmpty;
+        this.journalList.push(entry);
+      } else {
+        alert("Please fill in all the blanks");
+      }
     },
     onCancel() {
-      console.log('receive cancel');
+      console.log("receive cancel");
       this.showJournalForm = !this.showJournalForm;
+    },
+    onDelete(i) {
+      this.journalList.pop(i);
     },
   },
 };
@@ -113,5 +124,6 @@ export default {
   padding: 6px;
   border-radius: 5px;
   color: white;
+  margin: 0;
 }
 </style>
