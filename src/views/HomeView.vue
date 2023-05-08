@@ -14,7 +14,7 @@
     />
     <JournalForm
       v-if="showEditForm"
-      @clicked="onSubmit"
+      @updated="onUpdate"
       @cancel="onEditCancel"
       class="JournalForm"
       :currentEntry="currentEntry"
@@ -42,6 +42,7 @@
 <script>
 // @ is an alias to /src
 import JournalForm from '@/components/JournalForm.vue';
+import { ref } from 'vue';
 
 export default {
   name: 'HomeView',
@@ -54,6 +55,7 @@ export default {
       showEditForm: false,
       isEdit: false,
       currentEntry: {},
+      currentKey: Number,
     };
   },
   methods: {
@@ -65,6 +67,13 @@ export default {
         this.showCreateForm = !this.showCreateForm;
         if (this.isEmpty) this.isEmpty = !this.isEmpty;
         this.journalList.push(entry);
+      } else {
+        alert('Please fill in all the blanks');
+      }
+    },
+    onUpdate(entry) {
+      if (entry.item && entry.amount && entry.date) {
+        this.showEditForm = !this.showEditForm;
       } else {
         alert('Please fill in all the blanks');
       }
@@ -84,6 +93,7 @@ export default {
       this.isEdit = !this.isEdit;
       this.showEditForm = !this.showEditForm;
       this.currentEntry = this.journalList[i];
+      this.currentKey = i;
     },
   },
 };

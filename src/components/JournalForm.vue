@@ -25,8 +25,19 @@
           <button @click.prevent="cancelJournal" id="cancel" class="formButton">
             Cancel
           </button>
-          <button @click.prevent="createJournal" id="create" class="formButton">
+          <button
+            v-if="!isEdit"
+            @click.prevent="createJournal"
+            class="formButton"
+          >
             Create
+          </button>
+          <button
+            v-if="isEdit"
+            @click.prevent="updateJournal"
+            class="formButton"
+          >
+            Update
           </button>
         </div>
       </form>
@@ -49,6 +60,9 @@ export default {
     cancelJournal() {
       this.entry = {};
       this.$emit('cancel');
+    },
+    updateJournal() {
+      this.$emit('updated', this.entry);
     },
   },
   created() {
