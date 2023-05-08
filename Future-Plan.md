@@ -1,6 +1,6 @@
 # Future Plans
 
-- [ ] Store data on Firebase
+- [ ] Add backend
 - [ ] Use Tailwind instead of css
 - [ ] group and sort journals by date
 - [ ] Add sort by functionality
