@@ -35,10 +35,10 @@
 </template>
 <script>
 export default {
-  props: ['entry', 'isEdit'],
+  props: ['currentEntry', 'isEdit'],
+
   data() {
     return {
-      journalList: [],
       entry: {},
     };
   },
@@ -50,6 +50,11 @@ export default {
       this.entry = {};
       this.$emit('cancel');
     },
+  },
+  created() {
+    if (this.isEdit) {
+      this.entry = this.currentEntry;
+    }
   },
 };
 </script>

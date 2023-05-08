@@ -17,7 +17,7 @@
       @clicked="onSubmit"
       @cancel="onEditCancel"
       class="JournalForm"
-      :entry="entry"
+      :currentEntry="currentEntry"
       :isEdit="true"
     />
     <div id="formMask" v-if="showCreateForm"></div>
@@ -53,6 +53,7 @@ export default {
       journalList: [],
       showEditForm: false,
       isEdit: false,
+      currentEntry: {},
     };
   },
   methods: {
@@ -82,6 +83,7 @@ export default {
     onEdit(i) {
       this.isEdit = !this.isEdit;
       this.showEditForm = !this.showEditForm;
+      this.currentEntry = this.journalList[i];
     },
   },
 };
@@ -129,7 +131,7 @@ export default {
 .journal {
   display: flex;
   width: 60vw;
-  height: 13vh;
+  height: 8vh;
   margin-left: auto;
   margin-right: auto;
   justify-content: space-around;
