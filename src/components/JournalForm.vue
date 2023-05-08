@@ -2,7 +2,10 @@
   <div class="background">
     <div class="outer">
       <form action="">
-        <div class="title"><h1>Create a Journal</h1></div>
+        <div class="title">
+          <h1 v-if="!isEdit">Create a Journal</h1>
+          <h1 v-if="isEdit">Edit a Journal</h1>
+        </div>
 
         <label for="item">item</label>
         <input type="text" v-model="entry.item" id="item" required />
@@ -22,8 +25,19 @@
           <button @click.prevent="cancelJournal" id="cancel" class="formButton">
             Cancel
           </button>
-          <button @click.prevent="createJournal" id="create" class="formButton">
+          <button
+            v-if="!isEdit"
+            @click.prevent="createJournal"
+            class="formButton"
+          >
             Create
+          </button>
+          <button
+            v-if="isEdit"
+            @click.prevent="updateJournal"
+            class="formButton"
+          >
+            Update
           </button>
         </div>
       </form>
@@ -32,9 +46,10 @@
 </template>
 <script>
 export default {
+  props: ['currentEntry', 'isEdit'],
+
   data() {
     return {
-      journalList: [],
       entry: {},
     };
   },
@@ -45,8 +60,15 @@ export default {
     cancelJournal() {
       this.entry = {};
       this.$emit('cancel');
-      console.log('cancel');
     },
+    updateJournal() {
+      this.$emit('updated', this.entry);
+    },
+  },
+  created() {
+    if (this.isEdit) {
+      this.entry = this.currentEntry;
+    }
   },
 };
 </script>
