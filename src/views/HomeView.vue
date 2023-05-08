@@ -42,7 +42,6 @@
 <script>
 // @ is an alias to /src
 import JournalForm from '@/components/JournalForm.vue';
-import { ref } from 'vue';
 
 export default {
   name: 'HomeView',
@@ -74,6 +73,7 @@ export default {
     onUpdate(entry) {
       if (entry.item && entry.amount && entry.date) {
         this.showEditForm = !this.showEditForm;
+        this.isEdit = !this.isEdit;
       } else {
         alert('Please fill in all the blanks');
       }
