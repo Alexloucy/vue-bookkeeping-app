@@ -6,19 +6,30 @@
     <div id="plus_out" @click="createJournal()"><div id="plus">+</div></div>
 
     <JournalForm
-      v-if="showJournalForm"
+      v-if="showCreateForm"
       @clicked="onSubmit"
-      @cancel="onCancel"
-      id="JournalForm"
+      @cancel="onCreateCancel"
+      class="JournalForm"
+      :isEdit="isEdit"
     />
-    <div id="formMask" v-if="showJournalForm"></div>
+    <JournalForm
+      v-if="showEditForm"
+      @clicked="onSubmit"
+      @cancel="onEditCancel"
+      class="JournalForm"
+      :entry="entry"
+      :isEdit="true"
+    />
+    <div id="formMask" v-if="showCreateForm"></div>
+    <div id="formMask" v-if="showEditForm"></div>
 
     <div class="journalList">
       <div class="journal" v-for="(entry, i) in journalList" :key="i">
         <span id="item">{{ entry.item }}</span>
         <span id="amount">${{ entry.amount }}</span>
         <span id="date">{{ entry.date }}</span>
-        <span
+        <span id="buttons"
+          ><button id="edit" type="button" @click="onEdit(i)">Edit</button
           ><button id="delete" type="button" @click="onDelete(i)">
             Delete
           </button></span
@@ -30,37 +41,47 @@
 
 <script>
 // @ is an alias to /src
-import JournalForm from "@/components/JournalForm.vue";
+import JournalForm from '@/components/JournalForm.vue';
 
 export default {
-  name: "HomeView",
+  name: 'HomeView',
   components: { JournalForm },
   data() {
     return {
       isEmpty: true,
-      showJournalForm: false,
+      showCreateForm: false,
       journalList: [],
+      showEditForm: false,
+      isEdit: false,
     };
   },
   methods: {
     createJournal() {
-      this.showJournalForm = !this.showJournalForm;
+      this.showCreateForm = !this.showCreateForm;
     },
     onSubmit(entry) {
       if (entry.item && entry.amount && entry.date) {
-        this.showJournalForm = !this.showJournalForm;
+        this.showCreateForm = !this.showCreateForm;
         if (this.isEmpty) this.isEmpty = !this.isEmpty;
         this.journalList.push(entry);
       } else {
-        alert("Please fill in all the blanks");
+        alert('Please fill in all the blanks');
       }
     },
-    onCancel() {
-      console.log("receive cancel");
-      this.showJournalForm = !this.showJournalForm;
+    onCreateCancel() {
+      console.log('receive cancel');
+      this.showCreateForm = !this.showCreateForm;
+    },
+    onEditCancel() {
+      this.showEditForm = !this.showEditForm;
+      this.isEdit = !this.isEdit;
     },
     onDelete(i) {
       this.journalList.pop(i);
+    },
+    onEdit(i) {
+      this.isEdit = !this.isEdit;
+      this.showEditForm = !this.showEditForm;
     },
   },
 };
@@ -96,18 +117,19 @@ export default {
   top: 0;
   background-color: rgba(0, 0, 0, 0.6);
 }
-#JournalForm {
+.JournalForm {
   position: absolute;
   left: 0;
   right: 0;
   margin-left: auto;
   margin-right: auto;
+  z-index: 1;
 }
 
 .journal {
   display: flex;
-  width: 70vh;
-  height: 10vh;
+  width: 60vw;
+  height: 13vh;
   margin-left: auto;
   margin-right: auto;
   justify-content: space-around;
@@ -125,5 +147,19 @@ export default {
   border-radius: 5px;
   color: white;
   margin: 0;
+}
+#edit {
+  font-size: medium;
+  background-color: blue;
+  padding: 6px;
+  border-radius: 5px;
+  color: white;
+  margin: 0;
+}
+
+#buttons {
+  display: flex;
+  width: 15vw;
+  justify-content: space-evenly;
 }
 </style>

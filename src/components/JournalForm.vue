@@ -2,7 +2,10 @@
   <div class="background">
     <div class="outer">
       <form action="">
-        <div class="title"><h1>Create a Journal</h1></div>
+        <div class="title">
+          <h1 v-if="!isEdit">Create a Journal</h1>
+          <h1 v-if="isEdit">Edit a Journal</h1>
+        </div>
 
         <label for="item">item</label>
         <input type="text" v-model="entry.item" id="item" required />
@@ -32,6 +35,7 @@
 </template>
 <script>
 export default {
+  props: ['entry', 'isEdit'],
   data() {
     return {
       journalList: [],
@@ -45,7 +49,6 @@ export default {
     cancelJournal() {
       this.entry = {};
       this.$emit('cancel');
-      console.log('cancel');
     },
   },
 };
