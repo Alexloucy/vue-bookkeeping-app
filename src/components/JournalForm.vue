@@ -8,19 +8,32 @@
         </div>
 
         <label for="item">item</label>
-        <input type="text" v-model="entry.item" id="item" required />
+        <input
+          type="text"
+          v-model="entry.item"
+          class="formInput"
+          id="item"
+          required
+        />
 
         <label for="amount">amount</label>
         <input
           type="number"
           v-model="entry.amount"
+          class="formInput"
           id="amount"
           placeholder="please enter a number"
           required
         />
 
         <label for="date">date</label>
-        <input type="date" v-model="entry.date" id="date" required />
+        <input
+          type="date"
+          v-model="entry.date"
+          class="formInput"
+          id="date"
+          required
+        />
         <div id="buttonRow">
           <button @click.prevent="cancelJournal" id="cancel" class="formButton">
             Cancel
@@ -79,16 +92,14 @@ export default {
   align-items: center;
 }
 .outer {
-  width: 400px;
-  height: 400px;
   border-radius: 2%;
   display: flex;
   flex-direction: column;
   align-content: center;
   justify-content: center;
   align-items: center;
-
-  background-color: white;
+  background-color: #212121;
+  color: lightgrey;
   z-index: 1;
 }
 form {
@@ -97,10 +108,32 @@ form {
   align-items: flex-start;
   align-content: center;
   flex-wrap: wrap;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 15px;
 }
+
+.formInput {
+  margin-bottom: 20px;
+  height: 35px;
+  width: 350px;
+  border: 0px;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.formInput:focus {
+  outline-style: solid;
+  outline-color: #7f55e0;
+  outline-width: 3px;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
 h1 {
   margin-left: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 button {
@@ -115,8 +148,12 @@ button {
   font-size: medium;
   padding: 0%;
   align-items: center;
-  margin-top: 30px;
+  margin-top: 20px;
   margin-right: 30px;
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 #cancel {
@@ -130,6 +167,6 @@ input {
   margin-bottom: 3px;
 }
 label {
-  margin-bottom: 3px;
+  margin-bottom: 5px;
 }
 </style>

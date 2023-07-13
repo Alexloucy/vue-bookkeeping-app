@@ -1,10 +1,8 @@
 <template>
   <div class="home">
-    <h1 v-if="isEmpty">
-      Start by clicking the plus icon on the top right corner
-    </h1>
-    <div id="plus_out" @click="createJournal()"><div id="plus">+</div></div>
-
+    <span class="material-symbols-outlined" id="plus" @click="createJournal">
+      add_box
+    </span>
     <JournalForm
       v-if="showCreateForm"
       @clicked="onSubmit"
@@ -22,18 +20,28 @@
     />
     <div id="formMask" v-if="showCreateForm"></div>
     <div id="formMask" v-if="showEditForm"></div>
+    <h1 v-if="isEmpty">
+      Start by clicking the plus icon on the top right corner
+    </h1>
 
-    <div class="journalList">
-      <div class="journal" v-for="(entry, i) in journalList" :key="i">
-        <span id="item">{{ entry.item }}</span>
-        <span id="amount">${{ entry.amount }}</span>
-        <span id="date">{{ entry.date }}</span>
-        <span id="buttons"
-          ><button id="edit" type="button" @click="onEdit(i)">Edit</button
-          ><button id="delete" type="button" @click="onDelete(i)">
-            Delete
-          </button></span
-        >
+    <div id="notEmpty" v-else>
+      <div class="journalList">
+        <div class="journal" id="header">
+          <span>Item</span>
+          <span>Amount</span>
+          <span>Date</span>
+        </div>
+        <div class="journal" v-for="(entry, i) in journalList" :key="i">
+          <span id="item">{{ entry.item }}</span>
+          <span id="amount">${{ entry.amount }}</span>
+          <span id="date">{{ entry.date }}</span>
+          <span id="buttons"
+            ><button id="edit" type="button" @click="onEdit(i)">Edit</button
+            ><button id="delete" type="button" @click="onDelete(i)">
+              Delete
+            </button></span
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -100,27 +108,17 @@ export default {
 </script>
 
 <style>
-#plus_out {
-  border-style: solid;
-  border-color: blue;
-  border-radius: 0.5ch;
+#plus {
+  color: rgb(59, 59, 198);
   position: absolute;
-  top: 55px;
-  right: 16px;
-  width: 25px;
-  height: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 35px;
+  right: 10px;
   cursor: pointer;
   z-index: 1;
+  font-variation-settings: 'FILL' 0, 'wght' 400;
+  font-size: 40px;
 }
-#plus {
-  color: blue;
-  vertical-align: middle;
-  font-size: large;
-  font-weight: bold;
-}
+
 #formMask {
   position: fixed;
   left: 0;
@@ -146,7 +144,7 @@ export default {
   margin-right: auto;
   justify-content: space-around;
   align-items: center;
-  background-color: rgb(238, 229, 229);
+  background-color: #303030;
   border-radius: 5px;
   margin-bottom: 10px;
   padding: 1px;
@@ -154,7 +152,7 @@ export default {
 }
 #delete {
   font-size: medium;
-  background-color: red;
+  background-color: #b00020;
   padding: 6px;
   border-radius: 5px;
   color: white;
@@ -173,5 +171,14 @@ export default {
   display: flex;
   width: 15vw;
   justify-content: space-evenly;
+}
+
+button {
+  margin-right: 15px;
+}
+
+html {
+  background-color: #121212;
+  color: lightgrey;
 }
 </style>
