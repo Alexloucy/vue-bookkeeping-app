@@ -12,7 +12,7 @@
           type="text"
           v-model="entry.item"
           class="formInput"
-          id="item"
+          id="itemInput"
           required
         />
 
@@ -21,7 +21,7 @@
           type="number"
           v-model="entry.amount"
           class="formInput"
-          id="amount"
+          id="amountInput"
           placeholder="please enter a number"
           required
         />
@@ -31,7 +31,7 @@
           type="date"
           v-model="entry.date"
           class="formInput"
-          id="date"
+          id="dateInput"
           required
         />
         <div id="buttonRow">
@@ -98,8 +98,8 @@ export default {
   align-content: center;
   justify-content: center;
   align-items: center;
-  background-color: #212121;
-  color: lightgrey;
+  background-color: rgb(72, 72, 74);
+  color: white;
   z-index: 1;
 }
 form {
@@ -120,6 +120,7 @@ form {
   border: 0px;
   border-radius: 4px;
   font-size: 16px;
+  padding-left: 5px;
 }
 
 .formInput:focus {
@@ -157,7 +158,7 @@ button:hover {
 }
 
 #cancel {
-  background-color: red;
+  background-color: rgb(255, 69, 58);
 }
 
 input {

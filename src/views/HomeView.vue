@@ -1,184 +1,109 @@
-<template>
-  <div class="home">
-    <span class="material-symbols-outlined" id="plus" @click="createJournal">
-      add_box
-    </span>
-    <JournalForm
-      v-if="showCreateForm"
-      @clicked="onSubmit"
-      @cancel="onCreateCancel"
-      class="JournalForm"
-      :isEdit="isEdit"
-    />
-    <JournalForm
-      v-if="showEditForm"
-      @updated="onUpdate"
-      @cancel="onEditCancel"
-      class="JournalForm"
-      :currentEntry="currentEntry"
-      :isEdit="true"
-    />
-    <div id="formMask" v-if="showCreateForm"></div>
-    <div id="formMask" v-if="showEditForm"></div>
-    <h1 v-if="isEmpty">
-      Start by clicking the plus icon on the top right corner
-    </h1>
-
-    <div id="notEmpty" v-else>
-      <div class="journalList">
-        <div class="journal" id="header">
-          <span>Item</span>
-          <span>Amount</span>
-          <span>Date</span>
-        </div>
-        <div class="journal" v-for="(entry, i) in journalList" :key="i">
-          <span id="item">{{ entry.item }}</span>
-          <span id="amount">${{ entry.amount }}</span>
-          <span id="date">{{ entry.date }}</span>
-          <span id="buttons"
-            ><button id="edit" type="button" @click="onEdit(i)">Edit</button
-            ><button id="delete" type="button" @click="onDelete(i)">
-              Delete
-            </button></span
-          >
-        </div>
+<template lang="">
+  <div v-if="isLoggedIn"><button @click="signOut">Sign Out</button></div>
+  <div v-else>
+    <div v-if="!pageRegister">
+      <h1 class="heading">Sign in</h1>
+      <p><input type="text" placeholder="Email" v-model="email" /></p>
+      <p><input type="password" placeholder="Password" v-model="password" /></p>
+      <div id="buttonRow">
+        <button @click="signIn">Sign in</button>
+        <button @click="switchPage">Create New Account</button>
       </div>
+      <button @click="googleSignIn">Sign in with Google</button>
+    </div>
+    <div v-else>
+      <h1 class="heading">Register</h1>
+      <p><input type="text" placeholder="Email" v-model="email" /></p>
+      <p><input type="password" placeholder="Password" v-model="password" /></p>
+      <div id="buttonRow">
+        <button @click="register">Register</button>
+        <button @click="switchPage">Sign in</button>
+      </div>
+      <button @click="googleSignIn">Sign in with Google</button>
     </div>
   </div>
 </template>
-
 <script>
-// @ is an alias to /src
-import JournalForm from '@/components/JournalForm.vue';
+import { ref } from 'vue';
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from 'firebase/auth';
+import { useRouter } from 'vue-router';
+import router from '@/router';
 
 export default {
-  name: 'HomeView',
-  components: { JournalForm },
   data() {
     return {
-      isEmpty: true,
-      showCreateForm: false,
-      journalList: [],
-      showEditForm: false,
-      isEdit: false,
-      currentEntry: {},
-      currentKey: Number,
+      email: null,
+      password: null,
+      pageRegister: false,
+      auth: null,
+      isLoggedIn: false,
     };
   },
   methods: {
-    createJournal() {
-      this.showCreateForm = !this.showCreateForm;
+    signIn() {
+      const auth = getAuth();
+      createUserWithEmailAndPassword(auth, this.email, this.password)
+        .then((data) => {
+          console.log('successfully signed in!');
+          console.log(auth.currentUser);
+          router.push('/');
+        })
+        .catch((error) => {
+          console.log(error.code);
+          alert(error.message);
+        });
     },
-    onSubmit(entry) {
-      if (entry.item && entry.amount && entry.date) {
-        this.showCreateForm = !this.showCreateForm;
-        if (this.isEmpty) this.isEmpty = !this.isEmpty;
-        this.journalList.push(entry);
+    register() {
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, this.email, this.password)
+        .then((data) => {
+          console.log('successfully signed in!');
+          console.log(auth.currentUser);
+          router.push('/');
+        })
+        .catch((error) => {
+          console.log(error.code);
+          alert(error.message);
+        });
+    },
+    switchPage() {
+      this.pageRegister = !this.pageRegister;
+    },
+    googleSignIn() {
+      const auth = getAuth();
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then((data) => {
+          router.push('/');
+        })
+        .catch((error) => {
+          console.log(error.code);
+          alert(error.message);
+        });
+    },
+    signOut() {
+      const auth = getAuth();
+      signOut(auth);
+    },
+  },
+  mounted() {
+    let auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        this.isLoggedIn = true;
       } else {
-        alert('Please fill in all the blanks');
+        this.isLoggedIn = false;
       }
-    },
-    onUpdate(entry) {
-      if (entry.item && entry.amount && entry.date) {
-        this.showEditForm = !this.showEditForm;
-        this.isEdit = !this.isEdit;
-      } else {
-        alert('Please fill in all the blanks');
-      }
-    },
-    onCreateCancel() {
-      console.log('receive cancel');
-      this.showCreateForm = !this.showCreateForm;
-    },
-    onEditCancel() {
-      this.showEditForm = !this.showEditForm;
-      this.isEdit = !this.isEdit;
-    },
-    onDelete(i) {
-      this.journalList.pop(i);
-    },
-    onEdit(i) {
-      this.isEdit = !this.isEdit;
-      this.showEditForm = !this.showEditForm;
-      this.currentEntry = this.journalList[i];
-      this.currentKey = i;
-    },
+    });
   },
 };
 </script>
-
-<style>
-#plus {
-  color: rgb(59, 59, 198);
-  position: absolute;
-  top: 35px;
-  right: 10px;
-  cursor: pointer;
-  z-index: 1;
-  font-variation-settings: 'FILL' 0, 'wght' 400;
-  font-size: 40px;
-}
-
-#formMask {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 0;
-  background-color: rgba(0, 0, 0, 0.6);
-}
-.JournalForm {
-  position: absolute;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  z-index: 1;
-}
-
-.journal {
-  display: flex;
-  width: 60vw;
-  height: 8vh;
-  margin-left: auto;
-  margin-right: auto;
-  justify-content: space-around;
-  align-items: center;
-  background-color: #303030;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  padding: 1px;
-  font-size: large;
-}
-#delete {
-  font-size: medium;
-  background-color: #b00020;
-  padding: 6px;
-  border-radius: 5px;
-  color: white;
-  margin: 0;
-}
-#edit {
-  font-size: medium;
-  background-color: blue;
-  padding: 6px;
-  border-radius: 5px;
-  color: white;
-  margin: 0;
-}
-
-#buttons {
-  display: flex;
-  width: 15vw;
-  justify-content: space-evenly;
-}
-
-button {
-  margin-right: 15px;
-}
-
-html {
-  background-color: #121212;
-  color: lightgrey;
-}
-</style>
+<style lang=""></style>
