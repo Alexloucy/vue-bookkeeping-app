@@ -10,7 +10,7 @@
         <label for="item">item</label>
         <input
           type="text"
-          v-model="entry.item"
+          v-model="item"
           class="formInput"
           id="itemInput"
           required
@@ -19,7 +19,7 @@
         <label for="amount">amount</label>
         <input
           type="number"
-          v-model="entry.amount"
+          v-model="amount"
           class="formInput"
           id="amountInput"
           placeholder="please enter a number"
@@ -29,7 +29,7 @@
         <label for="date">date</label>
         <input
           type="date"
-          v-model="entry.date"
+          v-model="date"
           class="formInput"
           id="dateInput"
           required
@@ -63,24 +63,30 @@ export default {
 
   data() {
     return {
-      entry: {},
+      item,
+      amount,
+      date,
+      id: null,
     };
   },
   methods: {
     createJournal() {
-      this.$emit('clicked', this.entry);
+      this.$emit('clicked', this.item, this.amount, this.date);
     },
     cancelJournal() {
       this.entry = {};
       this.$emit('cancel');
     },
     updateJournal() {
-      this.$emit('updated', this.entry);
+      this.$emit('updated', this.id, this.item, this.amount, this.date);
     },
   },
   created() {
     if (this.isEdit) {
-      this.entry = this.currentEntry;
+      this.id = this.currentEntry.id;
+      this.item = this.currentEntry.item;
+      this.amount = this.currentEntry.amount;
+      this.date = this.currentEntry.date.toLocaleDateString('af-ZA');
     }
   },
 };

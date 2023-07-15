@@ -68,7 +68,15 @@
 // @ is an alias to /src
 import { onMounted } from 'vue';
 import JournalForm from '@/components/JournalForm.vue';
-import { collection, getDocs, getFirestore } from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  Timestamp,
+  setDoc,
+  doc,
+} from 'firebase/firestore';
 import { db } from '../main.js';
 
 export default {
@@ -89,17 +97,30 @@ export default {
     createJournal() {
       this.showCreateForm = !this.showCreateForm;
     },
-    onSubmit(entry) {
-      if (entry.item && entry.amount && entry.date) {
+    async onSubmit(item, amount, date) {
+      console.log(item);
+      if (item && amount && date) {
+        // this.showCreateForm = !this.showCreateForm;
+        // if (this.isEmpty) this.isEmpty = !this.isEmpty;
+        // this.journalList.push(entry);
+        // let dateObj = new Date(date)
+        await addDoc(collection(db, 'journals'), {
+          item: item,
+          amount: amount,
+          date: Timestamp.fromDate(new Date(date)),
+        });
         this.showCreateForm = !this.showCreateForm;
-        if (this.isEmpty) this.isEmpty = !this.isEmpty;
-        this.journalList.push(entry);
       } else {
         alert('Please fill in all the blanks');
       }
     },
-    onUpdate(entry) {
-      if (entry.item && entry.amount && entry.date) {
+    async onUpdate(id, item, amount, date) {
+      if (item && amount && date) {
+        await setDoc(doc(db, 'journals', id), {
+          item: item,
+          amount: amount,
+          date: Timestamp.fromDate(new Date(date)),
+        });
         this.showEditForm = !this.showEditForm;
         this.isEdit = !this.isEdit;
       } else {
@@ -107,7 +128,6 @@ export default {
       }
     },
     onCreateCancel() {
-      console.log('receive cancel');
       this.showCreateForm = !this.showCreateForm;
     },
     onEditCancel() {
@@ -124,15 +144,44 @@ export default {
       this.currentKey = i;
     },
   },
-  async mounted() {
-    console.log(db);
-    const querySnapshot = await getDocs(collection(db, 'journals'));
-    querySnapshot.forEach((doc) => {
-      this.journalList.push({
-        id: doc.id,
-        item: doc.data().item,
-        amount: doc.data().amount,
-        date: doc.data().date,
+  mounted() {
+    // const querySnapshot = await getDocs(collection(db, 'journals'));
+    // querySnapshot.forEach((doc) => {
+    //   this.journalList.push({
+    //     id: doc.id,
+    //     item: doc.data().item,
+    //     amount: doc.data().amount,
+    //     date: doc.data().date,
+    //   });
+    // });
+    onSnapshot(collection(db, 'journals'), (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === 'added') {
+          console.log('add');
+          this.journalList.push({
+            id: change.doc.id,
+            item: change.doc.data().item,
+            amount: change.doc.data().amount,
+            date: change.doc.data().date.toDate(),
+          });
+        }
+        if (change.type === 'modified') {
+          const checkId = (journal) => journal.id == change.doc.id;
+          console.log('change');
+          let index = this.journalList.findIndex(checkId);
+          this.journalList[index] = {
+            id: change.doc.id,
+            item: change.doc.data().item,
+            amount: change.doc.data().amount,
+            date: change.doc.data().date.toDate(),
+          };
+        }
+        if (change.type === 'removed') {
+          const checkId = (journal) => journal.id == change.doc.id;
+          console.log('delete');
+          let index = this.journalList.findIndex(checkId);
+          this.journalList.slice(index, 1);
+        }
       });
     });
   },
@@ -170,8 +219,8 @@ export default {
 
 .journal {
   display: flex;
-  width: 65vw;
-  height: 8vh;
+  width: 70vw;
+  height: 10vh;
   margin-left: auto;
   margin-right: auto;
   justify-content: space-around;
@@ -200,7 +249,7 @@ export default {
 }
 
 #date {
-  width: 15vw;
+  width: 20vw;
   margin: 5px 15px;
 }
 
