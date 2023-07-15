@@ -1,10 +1,18 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
+    <router-link to="/Account">Account</router-link> |
     <router-link to="/Journal">My Journals</router-link>
   </nav>
   <router-view />
 </template>
+
+<script>
+import { auth } from './firebase/firebaseInit';
+
+export default {
+  methods: {},
+};
+</script>
 
 <style>
 #app {

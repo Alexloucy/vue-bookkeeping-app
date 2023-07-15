@@ -63,9 +63,9 @@ export default {
 
   data() {
     return {
-      item,
-      amount,
-      date,
+      item: null,
+      amount: null,
+      date: null,
       id: null,
     };
   },

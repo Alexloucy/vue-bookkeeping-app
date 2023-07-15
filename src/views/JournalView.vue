@@ -31,10 +31,14 @@
           <span id="amount">Amount</span>
           <span id="date">Date</span>
           <div id="buttons">
-            <button class="listButton" id="sort" type="button" @click="sort">
-              <span class="material-symbols-outlined"> expand_more </span>Sort
-              By
-            </button>
+            <select name="Sort By" id="sort">
+              <option value="dateAsc">Date Ascending</option>
+              <option value="dateDes">Date Descending</option>
+              <option value="amountAsc">Amount Acending</option>
+              <option value="amountDes">Amount Descending</option>
+              <option value="dateAsc">Date Ascending</option>
+              <option value="dateDes">Date Descending</option>
+            </select>
           </div>
         </div>
         <div class="journal" v-for="(entry, i) in journalList" :key="i">
@@ -77,8 +81,11 @@ import {
   setDoc,
   doc,
   deleteDoc,
+  where,
+  query,
+  orderBy,
 } from 'firebase/firestore';
-import { db } from '../main.js';
+import { db } from '../firebase/firebaseInit.js';
 
 export default {
   name: 'JournalView',
@@ -92,6 +99,10 @@ export default {
       isEdit: false,
       currentEntry: {},
       currentKey: Number,
+      id: null,
+      item: null,
+      amount: null,
+      date: null,
     };
   },
   methods: {

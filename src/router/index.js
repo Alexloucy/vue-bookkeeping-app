@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory, useRouter } from 'vue-router';
-import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import HomeView from '../views/HomeView.vue';
 import JournalView from '../views/JournalView.vue';
+import AccountView from '../views/AccountView.vue';
+import { auth } from '../firebase/firebaseInit';
 
 const routes = [
   {
@@ -17,7 +18,17 @@ const routes = [
       requiresAuth: true,
     },
   },
+  {
+    path: '/Account',
+    name: 'account',
+    component: AccountView,
+  },
 ];
+
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes,
+});
 
 // const getCurrentuser = () => {
 //   return new Promise((resolve, reject) => {
@@ -33,7 +44,7 @@ const routes = [
 // };
 
 // router.beforeEach(async (to, from, next) => {
-//   if (to.matched.some((record) => record.meta.requiresAuth)) {
+//   if (to.matched.some((record) => record.meta.requiresAuth) &&  !auth.currentUser) {
 //     if (await getCurrentuser()) {
 //       next();
 //     } else {
@@ -44,6 +55,23 @@ const routes = [
 //     next();
 //   }
 // });
+
+router.beforeEach((to, from, next) => {
+  if (to.path === '/' && auth.currentUser) {
+    next('/Journal');
+    return;
+  }
+
+  if (
+    to.matched.some((record) => record.meta.requiresAuth) &&
+    !auth.currentUser
+  ) {
+    next('/Account');
+    return;
+  }
+
+  next();
+});
 
 // router.beforeEach(async (to, from) => {
 //   if (
@@ -56,10 +84,5 @@ const routes = [
 //     return { name: 'home' };
 //   }
 // });
-
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes,
-});
 
 export default router;
