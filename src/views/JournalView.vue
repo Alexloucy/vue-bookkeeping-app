@@ -31,13 +31,15 @@
           <span id="amount">Amount</span>
           <span id="date">Date</span>
           <div id="buttons">
-            <select name="Sort By" id="sort">
-              <option value="dateAsc">Date Ascending</option>
-              <option value="dateDes">Date Descending</option>
-              <option value="amountAsc">Amount Acending</option>
-              <option value="amountDes">Amount Descending</option>
-              <option value="dateAsc">Date Ascending</option>
-              <option value="dateDes">Date Descending</option>
+            <select
+              name="sortBy"
+              id="sort"
+              @change="sortBy(sortType)"
+              v-model="sortType"
+            >
+              <option v-for="item in sortOptions" :value="item.value">
+                {{ item.text }}
+              </option>
             </select>
           </div>
         </div>
@@ -85,7 +87,7 @@ import {
   query,
   orderBy,
 } from 'firebase/firestore';
-import { db } from '../firebase/firebaseInit.js';
+import { db, auth } from '../firebase/firebaseInit.js';
 
 export default {
   name: 'JournalView',
@@ -103,6 +105,16 @@ export default {
       item: null,
       amount: null,
       date: null,
+      sortType: 'sort',
+      sortOptions: [
+        { text: 'sort by', value: 'sort' },
+        { text: 'Date Descending', value: 'dateDes' },
+        { text: 'Date Ascending', value: 'dateAsc' },
+        { text: 'Item Descending', value: 'itemDes' },
+        { text: 'Item Ascending', value: 'itemAsc' },
+        { text: 'Amount Descending', value: 'amountDes' },
+        { text: 'Amount Ascending', value: 'amountAsc' },
+      ],
     };
   },
   methods: {
@@ -120,6 +132,7 @@ export default {
           item: item,
           amount: amount,
           date: Timestamp.fromDate(new Date(date)),
+          userId: auth.currentUser.uid,
         });
         this.showCreateForm = !this.showCreateForm;
       } else {
@@ -156,6 +169,10 @@ export default {
       this.currentEntry = this.journalList[i];
       this.currentKey = i;
     },
+    sortBy(sortType) {
+      if (sortType === 'dateAsc') {
+      }
+    },
   },
   mounted() {
     // const querySnapshot = await getDocs(collection(db, 'journals'));
@@ -167,36 +184,43 @@ export default {
     //     date: doc.data().date,
     //   });
     // });
-    onSnapshot(collection(db, 'journals'), (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        if (change.type === 'added') {
-          console.log('add');
-          this.journalList.push({
-            id: change.doc.id,
-            item: change.doc.data().item,
-            amount: change.doc.data().amount,
-            date: change.doc.data().date.toDate(),
-          });
-        }
-        if (change.type === 'modified') {
-          const checkId = (journal) => journal.id == change.doc.id;
-          console.log('change');
-          let index = this.journalList.findIndex(checkId);
-          this.journalList[index] = {
-            id: change.doc.id,
-            item: change.doc.data().item,
-            amount: change.doc.data().amount,
-            date: change.doc.data().date.toDate(),
-          };
-        }
-        if (change.type === 'removed') {
-          const checkId = (journal) => journal.id == change.doc.id;
-          console.log('delete');
-          let index = this.journalList.findIndex(checkId);
-          this.journalList.pop(index);
-        }
-      });
-    });
+    onSnapshot(
+      query(
+        collection(db, 'journals'),
+        where('userId', '==', auth.currentUser.uid),
+        orderBy('date', 'desc')
+      ),
+      (snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === 'added') {
+            console.log('add');
+            this.journalList.push({
+              id: change.doc.id,
+              item: change.doc.data().item,
+              amount: change.doc.data().amount,
+              date: change.doc.data().date.toDate(),
+            });
+          }
+          if (change.type === 'modified') {
+            const checkId = (journal) => journal.id == change.doc.id;
+            console.log('change');
+            let index = this.journalList.findIndex(checkId);
+            this.journalList[index] = {
+              id: change.doc.id,
+              item: change.doc.data().item,
+              amount: change.doc.data().amount,
+              date: change.doc.data().date.toDate(),
+            };
+          }
+          if (change.type === 'removed') {
+            const checkId = (journal) => journal.id == change.doc.id;
+            console.log('delete');
+            let index = this.journalList.findIndex(checkId);
+            this.journalList.pop(index);
+          }
+        });
+      }
+    );
   },
 };
 </script>
