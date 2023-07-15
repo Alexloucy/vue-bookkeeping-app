@@ -40,7 +40,7 @@
         <div class="journal" v-for="(entry, i) in journalList" :key="i">
           <span id="item">{{ entry.item }}</span>
           <span id="amount">${{ entry.amount }}</span>
-          <span id="date">{{ entry.date }}</span>
+          <span id="date">{{ entry.date.toLocaleDateString('en-NZ') }}</span>
           <span id="buttons"
             ><button
               class="listButton"
@@ -76,6 +76,7 @@ import {
   Timestamp,
   setDoc,
   doc,
+  deleteDoc,
 } from 'firebase/firestore';
 import { db } from '../main.js';
 
@@ -134,8 +135,9 @@ export default {
       this.showEditForm = !this.showEditForm;
       this.isEdit = !this.isEdit;
     },
-    onDelete(i) {
-      this.journalList.pop(i);
+    async onDelete(i) {
+      let toDelete = this.journalList[i];
+      await deleteDoc(doc(db, 'journals', toDelete.id));
     },
     onEdit(i) {
       this.isEdit = !this.isEdit;
@@ -180,7 +182,7 @@ export default {
           const checkId = (journal) => journal.id == change.doc.id;
           console.log('delete');
           let index = this.journalList.findIndex(checkId);
-          this.journalList.slice(index, 1);
+          this.journalList.pop(index);
         }
       });
     });
@@ -190,7 +192,7 @@ export default {
 
 <style>
 #plus {
-  color: rgb(59, 59, 198);
+  color: rgb(67, 67, 220);
   position: absolute;
   top: 35px;
   right: 10px;
@@ -220,7 +222,7 @@ export default {
 .journal {
   display: flex;
   width: 70vw;
-  height: 10vh;
+  height: 7vh;
   margin-left: auto;
   margin-right: auto;
   justify-content: space-around;
