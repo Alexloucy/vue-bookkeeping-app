@@ -1,5 +1,11 @@
 <template lang="">
-  <div v-if="isLoggedIn"><button @click="signOut">Sign Out</button></div>
+  <div v-if="isLoggedIn">
+    <h1 v-if="auth.currentUser.displayName">
+      Welcome {{ auth.currentUser.displayName }}
+    </h1>
+    <h1 v-else>Welcome {{ auth.currentUser.email }}</h1>
+    <button class="buttonAuth" @click="signOut">Sign Out</button>
+  </div>
   <div v-else>
     <div v-if="!pageRegister">
       <h1 class="heading">Sign in</h1>
@@ -19,6 +25,7 @@
           v-model="password"
         />
       </p>
+      <p class="error">{{ errMessage }}</p>
       <div id="buttonRow">
         <button class="buttonAuth" @click="switchPage">
           Create New Account
@@ -47,6 +54,7 @@
           v-model="password"
         />
       </p>
+      <h1>{{ errMessage }}</h1>
       <div id="buttonRow">
         <button class="buttonAuth" @click="switchPage">Sign in</button>
         <button class="buttonAuth" @click="register">Register</button>
@@ -70,6 +78,7 @@ import {
 } from 'firebase/auth';
 import { useRouter } from 'vue-router';
 import router from '@/router';
+import { auth } from '../firebase/firebaseInit';
 
 export default {
   data() {
@@ -79,11 +88,12 @@ export default {
       pageRegister: false,
       auth: null,
       isLoggedIn: false,
+      auth: auth,
+      errMessage: null,
     };
   },
   methods: {
     signIn() {
-      const auth = getAuth();
       signInWithEmailAndPassword(auth, this.email, this.password)
         .then((data) => {
           console.log('successfully signed in!');
@@ -91,12 +101,23 @@ export default {
           router.push('/Journal');
         })
         .catch((error) => {
-          console.log(error.code);
-          alert(error.message);
+          switch (error.code) {
+            case 'auth/invalid-email':
+              this.errMessage = 'Invalid Email';
+              break;
+            case 'auth/user-not-found':
+              this.errMessage = 'No account with this email was found';
+              break;
+            case 'auth/wrong-password':
+              this.errMessage = 'Incorrect password';
+              break;
+            default:
+              this.errMessage = 'Email or password was incorrect';
+              break;
+          }
         });
     },
     register() {
-      const auth = getAuth();
       createUserWithEmailAndPassword(auth, this.email, this.password)
         .then((data) => {
           console.log('successfully signed in!');
@@ -104,32 +125,53 @@ export default {
           router.push('/Journal');
         })
         .catch((error) => {
-          console.log(error.code);
-          alert(error.message);
+          switch (error.code) {
+            case 'auth/invalid-email':
+              this.errMessage = 'Invalid Email';
+              break;
+            case 'auth/user-not-found':
+              this.errMessage = 'No account with this email was found';
+              break;
+            case 'auth/wrong-password':
+              this.errMessage = 'Incorrect password';
+              break;
+            default:
+              this.errMessage = 'Email or password was incorrect';
+              break;
+          }
         });
     },
     switchPage() {
       this.pageRegister = !this.pageRegister;
     },
     googleSignIn() {
-      const auth = getAuth();
       const provider = new GoogleAuthProvider();
       signInWithPopup(auth, provider)
         .then((data) => {
           router.push('/');
         })
         .catch((error) => {
-          console.log(error.code);
-          alert(error.message);
+          switch (error.code) {
+            case 'auth/invalid-email':
+              this.errMessage = 'Invalid Email';
+              break;
+            case 'auth/user-not-found':
+              this.errMessage = 'No account with this email was found';
+              break;
+            case 'auth/wrong-password':
+              this.errMessage = 'Incorrect password';
+              break;
+            default:
+              this.errMessage = 'Email or password was incorrect';
+              break;
+          }
         });
     },
     signOut() {
-      const auth = getAuth();
       signOut(auth);
     },
   },
   mounted() {
-    let auth = getAuth();
     onAuthStateChanged(auth, (user) => {
       if (user) {
         this.isLoggedIn = true;
@@ -169,5 +211,9 @@ export default {
   height: 70px;
   font-size: 18px;
   padding: 5px;
+}
+.error {
+  color: red;
+  font-size: 20px;
 }
 </style>
