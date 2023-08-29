@@ -30,7 +30,7 @@
           <span id="item">Item</span>
           <span id="amount">Amount</span>
           <span id="date">Date</span>
-          <div id="buttons">
+          <div id="customSelect">
             <select
               name="sortBy"
               id="sort"
@@ -110,8 +110,6 @@ export default {
         { text: 'sort by', value: 'sort' },
         { text: 'Date Descending', value: 'dateDes' },
         { text: 'Date Ascending', value: 'dateAsc' },
-        { text: 'Item Descending', value: 'itemDes' },
-        { text: 'Item Ascending', value: 'itemAsc' },
         { text: 'Amount Descending', value: 'amountDes' },
         { text: 'Amount Ascending', value: 'amountAsc' },
       ],
@@ -171,6 +169,17 @@ export default {
     },
     sortBy(sortType) {
       if (sortType === 'dateAsc') {
+        this.journalList.sort((a, b) => new Date(a.date) - new Date(b.date));
+      } else if (sortType === 'dateDes') {
+        this.journalList.sort((a, b) => new Date(b.date) - new Date(a.date));
+      } else if (sortType === 'amountDes') {
+        this.journalList.sort(
+          (a, b) => new Date(b.amount) - new Date(a.amount)
+        );
+      } else if (sortType === 'amountAsc') {
+        this.journalList.sort(
+          (a, b) => new Date(a.amount) - new Date(b.amount)
+        );
       }
     },
   },
@@ -304,6 +313,25 @@ export default {
   justify-content: space-evenly;
   margin-left: auto;
   margin-right: 0;
+}
+
+select {
+  background-color: rgb(72, 72, 74);
+  border-color: #555;
+  color: #fff;
+  width: 90px !important;
+  height: 30px;
+  font-size: 16px;
+  margin-left: 90px;
+  outline: none;
+}
+
+select:hover {
+  border-color: #777;
+}
+
+select:focus {
+  border-color: #999;
 }
 
 html {
