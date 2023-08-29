@@ -319,10 +319,10 @@ select {
   background-color: rgb(72, 72, 74);
   border-color: #555;
   color: #fff;
-  width: 90px !important;
+  width: 170px !important;
   height: 30px;
   font-size: 16px;
-  margin-left: 90px;
+  margin-left: 140px;
   outline: none;
 }
 
