@@ -65,7 +65,7 @@ export default {
     return {
       item: null,
       amount: null,
-      date: null,
+      date: new Date().getDate().toLocaleString('af-ZA'),
       id: null,
     };
   },

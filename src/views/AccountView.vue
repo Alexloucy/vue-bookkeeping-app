@@ -7,61 +7,61 @@
     <button class="buttonAuth" @click="signOut">Sign Out</button>
   </div>
   <div v-else>
-    <div v-if="!pageRegister">
+    <div class="logForm" v-if="!pageRegister">
       <h1 class="heading">Sign in</h1>
-      <p>
-        <input
-          class="inputField"
-          type="text"
-          placeholder="Email"
-          v-model="email"
-        />
-      </p>
-      <p>
-        <input
-          class="inputField"
-          type="password"
-          placeholder="Password"
-          v-model="password"
-        />
-      </p>
+
+      <input
+        class="inputField"
+        type="text"
+        placeholder="Email"
+        v-model="email"
+      />
+
+      <input
+        class="inputField"
+        type="password"
+        placeholder="Password"
+        v-model="password"
+      />
+
       <p class="error">{{ errMessage }}</p>
-      <div id="buttonRow">
-        <button class="buttonAuth" @click="switchPage">
+
+      <!-- <button class="buttonAuth" @click="switchPage">
           Create New Account
-        </button>
-        <button class="buttonAuth" @click="signIn">Sign in</button>
-      </div>
+        </button> -->
+      <button class="buttonAuth" @click="signIn">Sign in</button>
+
       <button id="googleSignIn" @click="googleSignIn">
+        <img id="google" src="..\assets\google.png" alt="" srcset="" />
         Sign in with Google
       </button>
+      <div class="create">
+        <p>Don't have an account?</p>
+        <p id="register" @click="switchPage">Register Now</p>
+      </div>
     </div>
-    <div v-else>
+    <div class="logForm" v-else>
       <h1 class="heading">Register</h1>
-      <p>
-        <input
-          class="inputField"
-          type="text"
-          placeholder="Email"
-          v-model="email"
-        />
-      </p>
-      <p>
-        <input
-          class="inputField"
-          type="password"
-          placeholder="Password"
-          v-model="password"
-        />
-      </p>
-      <h1>{{ errMessage }}</h1>
-      <div id="buttonRow">
-        <button class="buttonAuth" @click="switchPage">Sign in</button>
-        <button class="buttonAuth" @click="register">Register</button>
+      <input
+        class="inputField"
+        type="text"
+        placeholder="Email"
+        v-model="email"
+      />
+      <input
+        class="inputField"
+        type="password"
+        placeholder="Password"
+        v-model="password"
+      />
+
+      <h1 class="error">{{ errMessage }}</h1>
+      <button class="buttonAuth" @click="register">Register</button>
+
+      <div class="create">
+        <p>Already have an account?</p>
+        <p id="register" @click="switchPage">Sign in Now</p>
       </div>
-      <button id="googleSignIn" @click="googleSignIn">
-        Sign in with Google
-      </button>
     </div>
   </div>
 </template>
@@ -183,12 +183,24 @@ export default {
 };
 </script>
 <style>
+.logForm {
+  border-style: solid;
+  border-radius: 5px;
+  border-color: rgb(129, 121, 121);
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 500px;
+  margin: auto;
+}
+
 .inputField {
   width: 400px;
-  height: 25px;
+  height: 35px;
   padding: 5px;
   padding-left: 7px;
-  margin-bottom: 10px;
+  margin-bottom: 25px;
   border-radius: 5px;
   border-style: none;
 }
@@ -201,19 +213,51 @@ export default {
   -webkit-box-shadow: none;
 }
 .buttonAuth {
-  width: 150px;
+  width: 412px;
   height: 60px;
   font-size: 18px;
   padding: 5px;
+  margin: 0;
+  margin-bottom: 25px;
 }
 #googleSignIn {
-  width: 200px;
+  width: 412px;
   height: 70px;
   font-size: 18px;
   padding: 5px;
+  margin: 0;
+  margin-bottom: 5px;
+  background-color: transparent;
+  outline: none;
+  border-style: solid;
+  border-radius: 5px;
+  border-color: white;
+  display: flex;
+  justify-content: center;
+}
+#google {
+  width: 35px;
+  margin-right: 15px;
+  margin-left: 10px;
 }
 .error {
   color: red;
-  font-size: 20px;
+  font-size: 16px;
+  width: 300px;
+  padding-bottom: 10px;
+  margin: 0;
+}
+.heading {
+  width: 300px;
+}
+.create {
+  display: flex;
+  flex-direction: row;
+}
+#register {
+  margin-left: 15px;
+  text-decoration: underline;
+  font-weight: bold;
+  cursor: pointer;
 }
 </style>

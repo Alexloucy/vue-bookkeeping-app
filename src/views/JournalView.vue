@@ -122,32 +122,32 @@ export default {
       this.showCreateForm = !this.showCreateForm;
     },
     async onSubmit(item, amount, date) {
-      console.log(item);
       if (item && amount && date) {
         // this.showCreateForm = !this.showCreateForm;
         // if (this.isEmpty) this.isEmpty = !this.isEmpty;
         // this.journalList.push(entry);
         // let dateObj = new Date(date)
+        this.showCreateForm = !this.showCreateForm;
         await addDoc(collection(db, 'journals'), {
           item: item,
           amount: amount,
           date: Timestamp.fromDate(new Date(date)),
           userId: auth.currentUser.uid,
         });
-        this.showCreateForm = !this.showCreateForm;
       } else {
         alert('Please fill in all the blanks');
       }
     },
     async onUpdate(id, item, amount, date) {
       if (item && amount && date) {
+        this.showEditForm = !this.showEditForm;
+        this.isEdit = !this.isEdit;
         await setDoc(doc(db, 'journals', id), {
           item: item,
           amount: amount,
           date: Timestamp.fromDate(new Date(date)),
+          userId: auth.currentUser.uid,
         });
-        this.showEditForm = !this.showEditForm;
-        this.isEdit = !this.isEdit;
       } else {
         alert('Please fill in all the blanks');
       }
@@ -175,15 +175,6 @@ export default {
     },
   },
   mounted() {
-    // const querySnapshot = await getDocs(collection(db, 'journals'));
-    // querySnapshot.forEach((doc) => {
-    //   this.journalList.push({
-    //     id: doc.id,
-    //     item: doc.data().item,
-    //     amount: doc.data().amount,
-    //     date: doc.data().date,
-    //   });
-    // });
     onSnapshot(
       query(
         collection(db, 'journals'),
@@ -193,7 +184,6 @@ export default {
       (snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === 'added') {
-            console.log('add');
             this.journalList.push({
               id: change.doc.id,
               item: change.doc.data().item,
@@ -203,7 +193,6 @@ export default {
           }
           if (change.type === 'modified') {
             const checkId = (journal) => journal.id == change.doc.id;
-            console.log('change');
             let index = this.journalList.findIndex(checkId);
             this.journalList[index] = {
               id: change.doc.id,
@@ -213,10 +202,8 @@ export default {
             };
           }
           if (change.type === 'removed') {
-            const checkId = (journal) => journal.id == change.doc.id;
-            console.log('delete');
-            let index = this.journalList.findIndex(checkId);
-            this.journalList.pop(index);
+            const checkId = change.doc.id;
+            this.journalList = this.journalList.filter((e) => e.id !== checkId);
           }
         });
       }
@@ -320,7 +307,7 @@ export default {
 }
 
 html {
-  background-color: #121212;
+  background-color: #181717;
   color: lightgrey;
 }
 </style>
