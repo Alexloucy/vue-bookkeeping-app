@@ -1,9 +1,9 @@
 <template lang="">
   <div v-if="isLoggedIn">
-    <h1 v-if="auth.currentUser.displayName">
+    <h1 class="heading" v-if="auth.currentUser.displayName">
       Welcome {{ auth.currentUser.displayName }}
     </h1>
-    <h1 v-else>Welcome {{ auth.currentUser.email }}</h1>
+    <h1 class="heading" v-else>Welcome {{ auth.currentUser.email }}</h1>
     <button class="buttonAuth" @click="signOut">Sign Out</button>
   </div>
   <div v-else>
@@ -66,7 +66,6 @@
   </div>
 </template>
 <script>
-import { ref } from 'vue';
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -76,7 +75,6 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
 } from 'firebase/auth';
-import { useRouter } from 'vue-router';
 import router from '@/router';
 import { auth } from '../firebase/firebaseInit';
 
@@ -186,7 +184,7 @@ export default {
 .logForm {
   border-style: solid;
   border-radius: 5px;
-  border-color: rgb(129, 121, 121);
+  border-color: rgba(183, 166, 166, 0.203);
   width: auto;
   display: flex;
   flex-direction: column;
@@ -220,6 +218,7 @@ export default {
   margin: 0;
   margin-bottom: 25px;
 }
+
 #googleSignIn {
   width: 412px;
   height: 70px;
@@ -249,6 +248,9 @@ export default {
 }
 .heading {
   width: 300px;
+  margin: auto;
+  margin-bottom: 20px;
+  margin-top: 10px;
 }
 .create {
   display: flex;
@@ -259,5 +261,72 @@ export default {
   text-decoration: underline;
   font-weight: bold;
   cursor: pointer;
+}
+@media screen and (max-width: 500px) {
+  .buttonAuth {
+    width: 312px;
+    height: 45px;
+    font-size: 18px;
+    padding: 5px;
+    margin: 0;
+    margin-bottom: 25px;
+    border-radius: 5px;
+  }
+  .logForm {
+    border-style: solid;
+    border-radius: 5px;
+    border-color: rgba(183, 166, 166, 0.203);
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 350px;
+    margin: auto;
+  }
+
+  .inputField {
+    width: 300px;
+    height: 35px;
+    padding: 5px;
+    padding-left: 7px;
+    margin-bottom: 25px;
+    border-radius: 5px;
+    border-style: none;
+  }
+  .inputField:focus {
+    outline-style: solid;
+    outline-color: #7f55e0;
+    outline-width: 3px;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+  }
+  #googleSignIn {
+    width: 312px;
+    height: 45px;
+    font-size: 18px;
+    padding: 5px;
+    margin: 0;
+    margin-bottom: 5px;
+    background-color: transparent;
+    outline: none;
+    border-style: solid;
+    border-radius: 5px;
+    border-color: white;
+    display: flex;
+    justify-content: center;
+  }
+  #google {
+    width: 30px;
+    margin-right: 15px;
+    margin-left: 10px;
+  }
+  .error {
+    color: red;
+    font-size: 16px;
+    width: 300px;
+    padding-bottom: 10px;
+    margin: 0;
+  }
 }
 </style>

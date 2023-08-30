@@ -52,6 +52,14 @@
           >
             Update
           </button>
+          <button
+            v-if="isEdit"
+            class="formButton"
+            id="deleteMobile"
+            @click.prevent="deleteJournal"
+          >
+            Delete
+          </button>
         </div>
       </form>
     </div>
@@ -65,7 +73,7 @@ export default {
     return {
       item: null,
       amount: null,
-      date: new Date().getDate().toLocaleString('af-ZA'),
+      date: new Date().toLocaleDateString('af-ZA'),
       id: null,
     };
   },
@@ -79,6 +87,9 @@ export default {
     },
     updateJournal() {
       this.$emit('updated', this.id, this.item, this.amount, this.date);
+    },
+    deleteJournal() {
+      this.$emit('deleted', this.id);
     },
   },
   created() {
@@ -175,5 +186,27 @@ input {
 }
 label {
   margin-bottom: 5px;
+}
+
+#deleteMobile {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .outer {
+    width: 375px;
+  }
+  #deleteMobile {
+    display: block;
+    background-color: rgb(255, 69, 58);
+  }
+  #buttonRow {
+    display: flex;
+    width: 370px;
+    justify-content: space-around;
+  }
+  form {
+    width: 365px;
+  }
 }
 </style>

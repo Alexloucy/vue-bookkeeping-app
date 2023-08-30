@@ -14,6 +14,7 @@
       v-if="showEditForm"
       @updated="onUpdate"
       @cancel="onEditCancel"
+      @deleted="onMobileDelete"
       class="JournalForm"
       :currentEntry="currentEntry"
       :isEdit="true"
@@ -161,6 +162,11 @@ export default {
       let toDelete = this.journalList[i];
       await deleteDoc(doc(db, 'journals', toDelete.id));
     },
+    async onMobileDelete(id) {
+      console.log('delete');
+      this.showEditForm = !this.showEditForm;
+      await deleteDoc(doc(db, 'journals', id));
+    },
     onEdit(i) {
       this.isEdit = !this.isEdit;
       this.showEditForm = !this.showEditForm;
@@ -173,13 +179,9 @@ export default {
       } else if (sortType === 'dateDes') {
         this.journalList.sort((a, b) => new Date(b.date) - new Date(a.date));
       } else if (sortType === 'amountDes') {
-        this.journalList.sort(
-          (a, b) => new Date(b.amount) - new Date(a.amount)
-        );
+        this.journalList.sort((a, b) => b.amount - a.amount);
       } else if (sortType === 'amountAsc') {
-        this.journalList.sort(
-          (a, b) => new Date(a.amount) - new Date(b.amount)
-        );
+        this.journalList.sort((a, b) => a.amount - b.amount);
       }
     },
   },
@@ -317,13 +319,14 @@ export default {
 
 select {
   background-color: rgb(72, 72, 74);
-  border-color: #555;
+  border-color: #8a8484;
   color: #fff;
   width: 170px !important;
   height: 30px;
   font-size: 16px;
   margin-left: 140px;
   outline: none;
+  border-radius: 5px;
 }
 
 select:hover {
@@ -337,5 +340,63 @@ select:focus {
 html {
   background-color: #181717;
   color: lightgrey;
+}
+
+@media screen and (max-width: 800px) {
+  .journal {
+    display: flex;
+    width: 95vw;
+    height: 7vh;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgb(72, 72, 74);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 1px;
+    font-size: large;
+    word-wrap: break-word;
+    font-size: 14px;
+  }
+  #item {
+    width: 15vw;
+    margin: 5px 15px;
+  }
+
+  #amount {
+    width: 14vw;
+    margin: 5px 15px;
+  }
+
+  #date {
+    width: 20vw;
+    margin: 5px 15px;
+  }
+  select {
+    background-color: rgb(72, 72, 74);
+    border-color: #8a8484;
+    color: #fff;
+    width: 130px !important;
+    height: 30px;
+    font-size: 14px;
+    margin-left: 0;
+    outline: none;
+    border-radius: 5px;
+  }
+
+  select:hover {
+    border-color: #777;
+  }
+
+  select:focus {
+    border-color: #999;
+  }
+  #delete {
+    display: none;
+  }
+  #edit {
+    margin-right: 5px;
+  }
 }
 </style>
