@@ -159,9 +159,6 @@ export default {
             case 'auth/wrong-password':
               this.errMessage = 'Incorrect password';
               break;
-            default:
-              this.errMessage = 'Email or password was incorrect';
-              break;
           }
         });
     },

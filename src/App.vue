@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import { auth } from './firebase/firebaseInit';
 
 export default {
   methods: {},
