@@ -144,26 +144,22 @@ export default {
     },
     googleSignIn() {
       const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider)
-        .then((data) => {
-          router.push('/');
-        })
-        .catch((error) => {
-          switch (error.code) {
-            case 'auth/invalid-email':
-              this.errMessage = 'Invalid Email';
-              break;
-            case 'auth/user-not-found':
-              this.errMessage = 'No account with this email was found';
-              break;
-            case 'auth/wrong-password':
-              this.errMessage = 'Incorrect password';
-              break;
-            default:
-              this.errMessage = 'Email or password was incorrect';
-              break;
-          }
-        });
+      signInWithPopup(auth, provider).then((data) => {
+        router.push('/');
+      });
+      // .catch((error) => {
+      //   switch (error.code) {
+      //     case 'auth/invalid-email':
+      //       this.errMessage = 'Invalid Email';
+      //       break;
+      //     case 'auth/user-not-found':
+      //       this.errMessage = 'No account with this email was found';
+      //       break;
+      //     case 'auth/wrong-password':
+      //       this.errMessage = 'Incorrect password';
+      //       break;
+      //   }
+      // });
     },
     signOut() {
       signOut(auth);
